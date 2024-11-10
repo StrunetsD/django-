@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    {% if honeys %}
+        <ul class="honey-list">
+            {% for honey in honeys %}  
+                    <h2>{{ honey.name }}</h2>
+                    {% if honey.image %}
+                    <img src="{{ honey.image.url }}" alt="{{ honey.name }}" class="honey-image" style="max-width: 100%; height: auto;">
+                {% endif %}
+                    <p>Описание: {{ honey.description }}</p>
+                    <p>Цена: {{ honey.price }} ₽</p>
+                    <a href="{% url 'honey_detail' honey.id %}" id = "button">Подробнее</a>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>На данный момент нет доступного меда.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ honey.name }}</h1>
+    <p>Описание: {{ honey.description }}</p>
+    <p>Цена: {{ honey.price }} ₽</p>
+
+    {% if honey.image %}
+        <img src="{{ honey.image.url }}" alt="{{ honey.name }}" style="max-width: 100%; height: auto;">
+    {% else %}
+        <p>Изображение не загружено.</p>
+    {% endif %}
+
+    <h2>Отзывы:</h2>
+    <ul>
+        {% for comment in honey.comment_set.all %}
+            <li>
+                <strong>{{ comment.created_at|date:"Y-m-d H:i" }}</strong>:
+                <em>Отзыв оставил: {{ comment.user.user}}</em>  
+                <br>
+                {{ comment.text }}
+            </li>
+        {% empty %}
+            <p>Отзывов пока нет.</p>
+        {% endfor %}
+    </ul>
+
+    <h2>Добавить отзыв</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="text">Ваш отзыв:</label>
+            {{ form.text }}
+            {% if form.text.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.text.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" id="button">Отправить</button>
+    </form>
+</div>
+{% endblock %}

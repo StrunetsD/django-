@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Профиль</h1>
+    <p>Email: {{ user.email }}</p>
+    <p>Имя: {{ user.first_name }}</p>
+    <p>Фамилия: {{ user.last_name }}</p>
+    <a href="{% url 'add_honey' %}" id="button">Добавление меда</a>
+    
+    <h2>Ваш мед:</h2>
+    <ul>
+        {% for honey in user_honey %}
+            <li style="display: flex; align-items: center; margin-bottom: 20px;"> 
+                {% if honey.honey.image %}  
+                    <img src="{{ honey.honey.image.url }}" alt="{{ honey.honey.name }}" style="max-width: 150px; height: auto; margin-right: 20px;">  
+                {% else %}
+                    <p>Изображение не загружено.</p>
+                {% endif %}
+                
+                <div style="flex: 1;">  
+                    <p>Название: {{ honey.honey.name }}</p> 
+                    <p>Описание: {{ honey.honey.description }}</p>
+                    <p>Цена: {{ honey.honey.price }} ₽</p>
+                </div>
+                
+                <div>
+                    <form action="{% url 'delete_post_honey' honey.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" id="button" onclick="return confirm('Вы уверены, что хотите удалить этот мед?');">Удалить</button>
+                    </form>
+                    
+                    <a href="{% url 'update_honey_article' honey.id %}" id="button">Редактирование</a>
+                </div>
+            </li>
+        {% empty %}
+            <p>У вас пока нет добавленного меда.</p>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
